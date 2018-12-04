@@ -102,21 +102,21 @@
         <th>Actions</th>
       </tr>
 
-      <% @venues.each do |venue| %>
+      <% @bookmarks.each do |bookmark| %>
       <tr>
-        <td><%= venue.name %></td>
-        <td><%= venue.address %></td>
+        <td><%= Venue.find(bookmark.venue_id).name %></td>
+        <td><%= Venue.find(bookmark.venue_id).address %></td>
         <td>
-          <% if venue.neighborhood.present? %>
-            <a href="/neighborhoods/<%= venue.neighborhood.id %>">
-              <%= venue.neighborhood.name %>
+          <% if Venue.find(bookmark.venue_id).neighborhood.present? %>
+            <a href="/neighborhoods/<%= Venue.find(bookmark.venue_id).neighborhood.id %>">
+              <%= Venue.find(bookmark.venue_id).neighborhood.name %>
             </a>
           <% end %>
         </td>
         <td>
-          <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
-          <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+          <a href="/venues/<%= bookmark.venue_id %>" class="btn btn-primary">Show</a>
+          <a href="/venues/<%= bookmark.venue_id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/delete_venue/<%= bookmark.venue_id %>" class="btn btn-danger" rel="nofollow">Delete</a>
         </td>
       </tr>
       <% end %>
