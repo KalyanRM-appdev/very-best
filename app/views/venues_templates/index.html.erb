@@ -13,64 +13,15 @@
     <%= f.text_field :name_cont, :class => "form-control", :placeholder => "Name contains" %>
   </div>
 
+
 <div class="form-group">
-          <%= f.label :created_at, "Created at" %>
-          <div class="row">
-            <div class='col-md-6 mb-1'>
-              <div class='input-group date' id='created_atgteqPicker'>
-                  <%= f.text_field :created_at_gteq, :class => "form-control", :placeholder => "Created at greater than or equal to" %>
-                  <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-calendar"></span>
-                  </span>
-              </div>
-            </div>
-
-            <div class='col-md-6'>
-              <div class='input-group date' id='created_atlteqPicker'>
-                  <%= f.text_field :created_at_lteq, :class => "form-control", :placeholder => "Created at less than or equal to" %>
-                  <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-calendar"></span>
-                  </span>
-              </div>
-            </div>
-          </div>
-      </div>
-      <script type="text/javascript">
-          $(function () {
-              $('#created_atgteqPicker').datetimepicker({
-                  format: 'YYYY-MM-DD hh:mm:SS'
-              });
-              $('#created_atlteqPicker').datetimepicker({
-                  useCurrent: false,
-                  format: 'YYYY-MM-DD hh:mm:SS'
-              });
-              $('#created_atgteqPicker').on("dp.change", function (e) {
-                  $('#created_atlteqPicker').data("DateTimePicker").minDate(e.date);
-              });
-              $('#created_atlteqPicker').on("dp.change", function (e) {
-                  $('#created_atgteqPicker').data("DateTimePicker").maxDate(e.date);
-              });
-          });
-      </script>
-
-        <div class="form-group">
-      <%= f.label :bookmarks_notes_cont, "Bookmark notes contains" %>
-      <%= f.text_field :bookmarks_notes_cont, :class => "form-control", :placeholder => "Bookmark notes contains" %>
+      <%= f.label :specialties_name_cont, "Bookmarked dish name contains" %>
+      <%= f.text_field :specialties_name_cont, :class => "form-control", :placeholder => "Bookmarked dish name contains" %>
     </div>
-
-<div class="form-group">
+    
+    <div class="form-group">
       <%= f.label :neighborhood_name_cont, "Neighborhood name contains" %>
       <%= f.text_field :neighborhood_name_cont, :class => "form-control", :placeholder => "Neighborhood name contains" %>
-    </div>
-
-<div class="form-group">
-      <%= f.label :fans_username_cont, "User username contains" %>
-      <%= f.text_field :fans_username_cont, :class => "form-control", :placeholder => "User username contains" %>
-    </div>
-
-<div class="form-group">
-      <%= f.label :specialties_name_cont, "Dish name contains" %>
-      <%= f.text_field :specialties_name_cont, :class => "form-control", :placeholder => "Dish name contains" %>
     </div>
 
       <%= f.submit :class => "btn btn-primary btn-block mb-1" %>
@@ -102,23 +53,29 @@
         <th>Actions</th>
       </tr>
 
-      <% @bookmarks.each do |bookmark| %>
+      <% @venues.each do |venue| %>
+      
+      <% venue.bookmarks.each do |bookmark| %>
+      <% if bookmark.user_id == current_user.id %>            
       <tr>
-        <td><%= Venue.find(bookmark.venue_id).name %></td>
-        <td><%= Venue.find(bookmark.venue_id).address %></td>
+        <td><%= venue.name %></td>
+        <td><%= venue.address %></td>
         <td>
-          <% if Venue.find(bookmark.venue_id).neighborhood.present? %>
-            <a href="/neighborhoods/<%= Venue.find(bookmark.venue_id).neighborhood.id %>">
-              <%= Venue.find(bookmark.venue_id).neighborhood.name %>
+          <% if venue.neighborhood.present?  %>
+            <a href="/neighborhoods/<%= venue.neighborhood.id %>">
+              <%= venue.neighborhood.name %>
             </a>
           <% end %>
         </td>
         <td>
-          <a href="/venues/<%= bookmark.venue_id %>" class="btn btn-primary">Show</a>
-          <a href="/venues/<%= bookmark.venue_id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_venue/<%= bookmark.venue_id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+          <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
+          <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
         </td>
       </tr>
+      <% else %>
+      <% end %>
+      <% end %>
       <% end %>
     </table>
     <%= paginate @venues, theme: 'twitter-bootstrap-4' %>
