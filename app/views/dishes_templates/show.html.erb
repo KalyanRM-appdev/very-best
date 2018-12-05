@@ -1,62 +1,70 @@
-<div class="row">
-  <div class="col-md-12">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        You loved the <%= @dish.name %> at...
-        <div class="badge badge-primary float-right">
-          <%= @dish.cuisine.name %>
-        </div>
-      </li>
-      <li class="list-group-item">
-        <form action="/create_bookmark" method="post">
 
-      <!-- Label and input for dish_id -->
-      <input type="hidden" name="dish_id" value="<%= @dish.id %>">
-      
-      <!-- Label and input for user_id -->
-      <input type="hidden" name="user_id" value="<%= current_user.id %>">
-      
-      <!-- Label and input for venue_id -->
-      <div class="form-group">
-        <label for="venue_id" class="control-label sr-only">
-          Venue
-        </label>
-
-        <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name), :class => "form-control") %>
+<div class="row mt-4 justify-content-md-center">
+  <div class="col-md-6">
+    
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          You loved the <%= @dish.name %> at...
+          <div class="badge badge-primary float-right">
+            <%= @dish.cuisine.name %>
+          </div>
+        </h4>
       </div>
-
-      <button class="btn btn-primary btn">
-        <i class="fa fa-heart"></i>
-      </button>
-      <small class="float-right text-muted">
-        right now
-      </small>
-    </form>
-      </li>
-      <% @dish.bookmarks.each do |bookmark| %>
+    
+      <ul class="list-group">
         <li class="list-group-item">
-          <p>
-            <a href="/bookmarks/<%= bookmark.id %>">
-              <%= bookmark.venue.name %>
-            </a>
+          <form action="/create_bookmark" class="form-inline float-left" method="post">
+  
+            <!-- Label and input for dish_id -->
+            <input type="hidden" name="dish_id" value="<%= @dish.id %>">
             
-            <div class="btn-group btn-group-xs float-right">
-              <small class="float-right text-muted">
-                <%= time_ago_in_words(bookmark.created_at) %> ago
-              </small>
-              <a href="/bookmarks/<%= bookmark.id %>/edit" class="btn btn-warning">
-                <i class="fa fa-edit"></i>
-              </a>
-              <a href="/delete_bookmark/<%= bookmark.id %>" class="btn btn-danger" rel="nofollow">
-                <i class="fa fa-trash-o"></i>
-              </a>
-            </div>
-          </p>
-        </li>
-      <% end %>
-
+            <!-- Label and input for user_id -->
+            <input type="hidden" name="user_id" value="<%= current_user.id %>">
+            
+            <!-- Label and input for venue_id -->
+            <div class="form-group mr-sm-1">
+              <label for="venue_id" class="control-label sr-only">
+                Venue
+              </label>
       
-    </ul>
+              <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name), :class => "form-control", :prompt => "Choose a venue...") %>
+            </div>
+      
+            <button class="btn btn-primary btn">
+              <i class="fa fa-heart"></i>
+            </button>
+          </form>
+          <small class="float-right text-muted">
+            right now
+          </small>
+          
+        </li>
+        <% @dish.bookmarks.each do |bookmark| %>
+          <li class="list-group-item">
+            <p>
+              <a href="/bookmarks/<%= bookmark.id %>">
+                <%= bookmark.venue.name %>
+              </a>
+                <small class="float-right text-muted">
+                  <%= time_ago_in_words(bookmark.created_at) %> ago
+
+                  <a href="/bookmarks/<%= bookmark.id %>/edit" >
+                    <i class="fa fa-fw fa-edit"></i>
+                  </a>
+                  <a href="/delete_bookmark/<%= bookmark.id %>"  >
+                    <i class="fa fa-fw fa-trash-o"></i>
+                  </a>
+                </small>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+      <div class="card-footer text-center">
+        <a href="/dishes" class="btn btn-block btn-secondary">
+          <i class="fa fa-chevron-left"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
-
