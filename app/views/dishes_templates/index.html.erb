@@ -89,12 +89,12 @@
       <tr>
         <th>Name</th>
         <th>Cuisine</th>
-        <th>Actions</th>
+        <th>is at...</th>
       </tr>
 
       <% @dishes.each do |dish| %>
       <tr>
-        <td><%= dish.name %></td>
+        <td><%=dish.name %></td>
         <td>
           <% if dish.cuisine.present? %>
             <a href="/cuisines/<%= dish.cuisine.id %>">
@@ -103,10 +103,43 @@
           <% end %>
         </td>
         <td>
-          <a href="/dishes/<%= dish.id %>" class="btn btn-primary">Show</a>
-          <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_dish/<%= dish.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
-        </td>
+          <% if Bookmark.where(dish_id: dish.id).present? %>
+            <a href="/venues/<%= Bookmark.find_by(dish_id: dish.id).venue_id %>">
+              <%= Venue.find_by(id: Bookmark.find_by(dish_id: dish.id).venue_id).name %>
+              
+            </a>
+          
+          <% else%>
+          
+         <form action="/create_bookmark" method = "post" >
+      <div>
+        <!-- Label and input for dish_id -->
+        <input type="hidden" name = "dish_id" value = "<%= dish.id %>" >
+      </div>  
+      <div>
+        <!-- Label and input for dish_id -->
+        <input type="hidden" name = "name" value = "<%= dish.name %>" >
+      </div>
+      <div>
+        <!-- Label and input for dish_id -->
+        <input type="hidden" name = "user_id" value = "<%= current_user.id %>" >
+      </div>
+      
+      <div>
+      <input type="hidden" name="notes" value = " " class="form-control">
+      </div>
+      
+      <div class="form-group">
+
+    <%= select_tag("venue_id", options_from_collection_for_select(Venue.all, :id, :name, dish.try(:venue_id)), :class => "form-control") %>
+      </div>
+      
+      
+
+      <button class="btn btn-block btn-outline-secondary"><i class="fa fa-heart"></i></button>
+    </form>
+    <% end %>
+         
       </tr>
       <% end %>
     </table>
