@@ -1,31 +1,24 @@
-<div class="page-header">
-  <h1>
-    Dishes
-    <a href="/dishes/new" class="btn btn-lg btn-success">New Dish</a>
-  </h1>
-  <h1>
-    <a href="/venues/new" class="btn btn-lg btn-success">New Venue</a>
-  </h1>
-</div><div class="row mb-1">
-  <div class="col-md-12">
+
+<div class="row mb-1 mt-4">
+  <div class="col-md-3 mb-1">
     <%= search_form_for @q, :class => "collapse", :id => "dishes_filters" do |f| %>
       <p class="lead">Narrow results:</p>
 
         <div class="form-group">
-    <%= f.label :name_cont, "Name contains" %>
-    <%= f.text_field :name_cont, :class => "form-control", :placeholder => "Name contains" %>
-  </div>
+          <%= f.label :name_cont, "Name contains" %>
+          <%= f.text_field :name_cont, :class => "form-control", :placeholder => "Name contains" %>
+        </div>
 
 
         <div class="form-group">
           <%= "Cuisine" %>
           <% Cuisine.all.each do |cuisine| %>
-            <p>
+            <div class="checkbox">
             <label>
               <%= check_box_tag('q[cuisine_id_eq_any][]', cuisine.id, (true if @q.cuisine_id_eq_any.try(:include?, cuisine.id))) %>
               <%= cuisine.name %>
             </label>
-            </p>
+            </div>
           <% end %>
         </div>
        
@@ -38,79 +31,85 @@
       Show Filters
     </a>
   </div>
+
+
+
+  <div class="col-md-6">
+    <div class="card">
+      <table class="table table-striped table-hover">
+        <tr>
+  
+          <th>The very best...</th>
+          <th>is at...</th>
+          <th></th>
+  
+        </tr>
+  
+        <% @dishes.each do |dish| %>
+        <tr>
+          <td>
+            <a href="/dishes/<%= dish.id %>">
+              <%= dish.name %>
+            </a>
+          </td>
+          
+          <td>
+            
+            <% if Bookmark.where(dish_id: dish.id).present? %>
+              <a href="/venues/<%= Bookmark.find_by(dish_id: dish.id).venue_id %>">
+                <%= Venue.find_by(id: Bookmark.find_by(dish_id: dish.id).venue_id).name %>
+                
+              </a>
+            
+            <% else%>
+            
+           <form action="/create_bookmark" class="form-inline" method="post">
+  
+            <!-- Label and input for dish_id -->
+            <input type="hidden" name="dish_id" value="<%= dish.id %>">
+            
+            <!-- Label and input for user_id -->
+            <input type="hidden" name="user_id" value="<%= current_user.id %>">
+            
+            <!-- Label and input fornotes -->
+            <input type="hidden" name="notes" value="<%=  %>">
+            
+            <!-- Label and input for venue_id -->
+            <div class="form-group mr-sm-1">
+              <label for="venue_id" class="control-label sr-only">
+                Venue
+              </label>
+      
+              <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name), :class => "form-control form-control-sm mr-sm-1", :prompt => "Choose a venue...") %>
+            </div>
+      
+            <button class="btn btn-primary btn-sm">
+              <i class="fa fa-heart"></i>
+            </button>
+          </form>
+      <% end %>
+           
+          </td>
+          
+          <td>
+            <div class="badge badge-primary">
+              <% if dish.cuisine.present? %>
+                <%= dish.cuisine.name %>
+              <% end %>
+            </div>
+          </td>
+  
+        </tr>
+        <% end %>
+      </table>
+      <div class="card-footer text-center">
+      </div>
+    </div>
+  </div>
+
+
+<div class="col-md-3">
+  <a href="/venues/new" class="btn btn-block btn-success">Add a new venue</a>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <table class="table table-striped table-hover">
-      <tr>
-
-        <th>The very best...</th>
-        <th>is at...</th>
-        <th></th>
-
-      </tr>
-
-      <% @dishes.each do |dish| %>
-      <tr>
-        <td>
-          <a href="/dishes/<%= dish.id %>">
-            <%= dish.name %>
-          </a>
-        </td>
-        
-        <td>
-          
-          <% if Bookmark.where(dish_id: dish.id).present? %>
-            <a href="/venues/<%= Bookmark.find_by(dish_id: dish.id).venue_id %>">
-              <%= Venue.find_by(id: Bookmark.find_by(dish_id: dish.id).venue_id).name %>
-              
-            </a>
-          
-          <% else%>
-          
-         <form action="/create_bookmark" method = "post" >
-      <div>
-        <!-- Label and input for dish_id -->
-        <input type="hidden" name = "dish_id" value = "<%= dish.id %>" >
-      </div>  
-      <div>
-        <!-- Label and input for dish_id -->
-        <input type="hidden" name = "name" value = "<%= dish.name %>" >
-      </div>
-      <div>
-        <!-- Label and input for dish_id -->
-        <input type="hidden" name = "user_id" value = "<%= current_user.id %>" >
-      </div>
-      
-      <div>
-      <input type="hidden" name="notes" value = " " class="form-control">
-      </div>
-      
-      <div class="form-group">
-
-    <%= select_tag("venue_id", options_from_collection_for_select(Venue.all, :id, :name, dish.try(:venue_id)), :class => "form-control") %>
-      </div>
-      
-      
-
-      <button class="btn btn-block btn-outline-secondary"><i class="fa fa-heart"></i></button>
-    </form>
-    <% end %>
-         
-        </td>
-        
-        <td>
-          <div class="badge badge-primary">
-            <% if dish.cuisine.present? %>
-              <%= dish.cuisine.name %>
-            <% end %>
-          </div>
-        </td>
-
-      </tr>
-      <% end %>
-    </table>
-    <%= paginate @dishes, theme: 'twitter-bootstrap-4' %>
-  </div>
 </div>
