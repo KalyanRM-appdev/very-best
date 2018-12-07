@@ -1,78 +1,56 @@
-<div class="page-header">
-  <h3><%=@venue.name %></h3>
-  <div><%=@venue.address %></div>
-</div>
+<div class="row mt-4 justify-content-md-center">
+  <div class="col-md-6">
+    
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          <%=@venue.name %>
+          <small class="text-muted">
+            <%= @venue.neighborhood.name %>,
+            <%= @venue.address %>
+          </small>
+        </h4>
+      </div>
 
-<div class="row">
-  <div class="col-md-12 mb-2">
-    <dl class="dl-horizontal">
-
-      <dt>Google Map</dt>
-      <dd>
-        <div>
-          <div id="location_map" style="height: 480px;"></div>
-        </div>
-      </dd>
-
-      <dt>Neighborhood</dt>
-      <dd>
-        <% if @venue.neighborhood.present? %>
-          <a href="/neighborhoods/<%= @venue.neighborhood_id %>">
-            <%= @venue.neighborhood.name %>
-          </a>
-        <% end %>
-      </dd>
-
-    </dl>
-
-    <div class="btn-group btn-group-justified">
-      <a href="/venues" class="btn btn-primary">
-        Back
-      </a>
-      <a href="/venues/<%= @venue.id %>/edit" class="btn btn-warning">
-        Edit
-      </a>
-      <a href="/delete_venue/<%= @venue.id %>" class="btn btn-danger" rel="nofollow">
-        Delete
-      </a>
+    <div class="card-body">
+      <div>Google Map</div>
+      <div id="location_map" style="height: 360px;"></div>
     </div>
-  </div>
-</div>
 
 <!-- A Venue has many bookmarks -->
 
-<div class="row">
-  <div class="col-md-12">
+
     <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        Bookmarks
+      <li class="list-group-item list-group-item-success">
+        Dishes that everyone has loved here
       </li>
 
       <% @venue.bookmarks.each do |bookmark| %>
         <li class="list-group-item">
           <a href="/bookmarks/<%= bookmark.id %>">
-            <%= bookmark.notes %>
+            <%= bookmark.dish.name %>
           </a>
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/bookmarks/<%= bookmark.id %>" class="btn btn-primary">
-              <i class="fa fa-search-plus"></i>
+          
+          <small class="float-right text-muted">
+            <%= time_ago_in_words(bookmark.created_at) %> ago
+
+            <a href="/bookmarks/<%= bookmark.id %>/edit" >
+              <i class="fa fa-fw fa-edit"></i>
             </a>
-            <a href="/bookmarks/<%= bookmark.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
+            <a href="/delete_bookmark/<%= bookmark.id %>"  >
+              <i class="fa fa-fw fa-trash-o"></i>
             </a>
-            <a href="/delete_bookmark/<%= bookmark.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
+          </small>
+
         </li>
       <% end %>
 
       <li class="list-group-item">
-        <form action="/create_bookmark" method="post">
+        <form action="/create_bookmark" class="form-inline float-left" method="post">
 
       <!-- Label and input for dish_id -->
-      <div class="form-group">
-        <label for="dish_id" class="control-label">
+      <div class="form-group mr-sm-1">
+        <label for="dish_id" class="control-label sr-only">
           Dish
         </label>
 
@@ -85,31 +63,27 @@
       <!-- Label and input for user_id -->
       <input type="hidden" name="user_id" value="<%= current_user.id %>">
 
-      <!-- Label and input for notes -->
-      <div class="form-group">
-        <label for="notes" class="control-label">
-          Notes
-        </label>
+      <!-- Label and input fornotes -->
+      <input type="hidden" name="notes" value="<%=  %>">
 
-        <textarea id="notes" name="notes" placeholder="Notes" class="form-control" rows="3"></textarea>
-      </div>
-
-      <button class="btn btn-block btn-success">
-        Create Bookmark
+      <button class="btn btn-primary btn">
+        <i class="fa fa-heart"></i>
       </button>
+      
     </form>
+    <small class="float-right text-muted">
+      right now
+    </small>
       </li>
     </ul>
-  </div>
-</div>
+
 
 <!-- A Venue has many specialties -->
 
-<div class="row">
-  <div class="col-md-12">
+
     <ul class="list-group">
-      <li class="list-group-item list-group-item-info">
-        Specialties
+      <li class="list-group-item list-group-item-success">
+        Popular dishes here
       </li>
 
       <% @venue.specialties.each do |dish| %>
@@ -117,22 +91,16 @@
           <a href="/dishes/<%= dish.id %>">
             <%= dish.name %>
           </a>
-          <div class="btn-group btn-group-xs float-right">
-            <a href="/dishes/<%= dish.id %>" class="btn btn-primary">
-              <i class="fa fa-search-plus"></i>
-            </a>
-            <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">
-              <i class="fa fa-edit"></i>
-            </a>
-            <a href="/delete_dish/<%= dish.id %>" class="btn btn-danger" rel="nofollow">
-              <i class="fa fa-trash-o"></i>
-            </a>
-          </div>
         </li>
       <% end %>
     </ul>
-  </div>
-</div>
+    
+    <div class="card-footer text-center">
+      <a href="/venues" class="btn btn-block btn-secondary">
+        <i class="fa fa-chevron-left"></i>
+      </a>
+    </div>
+
 
 
 <script src="//maps.google.com/maps/api/js?v=3.24&key=AIzaSyCOTPWiuvyyo6sKoIBzKA4-1ol-vTOIOlM"></script>
@@ -151,3 +119,8 @@
     handler.fitMapToBounds();
   });
 </script>
+
+
+    </div>
+  </div>
+</div>
