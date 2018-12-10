@@ -13,7 +13,7 @@
       </div>
 
     <div class="card-body">
-      <div>Google Map</div>
+  
       <div id="location_map" style="height: 360px;"></div>
     </div>
 
@@ -22,12 +22,15 @@
 
     <ul class="list-group">
       <li class="list-group-item list-group-item-success">
-        Dishes that everyone has loved here
+        Dishes you loved here
       </li>
 
       <% @venue.bookmarks.each do |bookmark| %>
+        
+        <% if bookmark.user_id == current_user.id %>
         <li class="list-group-item">
-          <a href="/bookmarks/<%= bookmark.id %>">
+          <p>
+          <a href="/venues/<%= bookmark.venue_id %>">
             <%= bookmark.dish.name %>
           </a>
           
@@ -41,8 +44,13 @@
               <i class="fa fa-fw fa-trash-o"></i>
             </a>
           </small>
-
+          </p>
+          <p>
+            <%= bookmark.notes %>
+          </p>
         </li>
+        <% else%>
+        <%end%>
       <% end %>
 
       <li class="list-group-item">
