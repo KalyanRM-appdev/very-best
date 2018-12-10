@@ -11,8 +11,7 @@ class VenuesController < ApplicationController
         longitude = parsed_data.dig("results",0,"geometry","location","lng")
         marker.lat latitude
         marker.lng longitude
-        marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.created_at}</a></h5><small>#{venue.address_formatted_address}</small>"
-      
+        marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.name}</a></h5><small>#{venue.address}</small>"            
     end
 
     render("venues_templates/index.html.erb")
@@ -30,8 +29,8 @@ class VenuesController < ApplicationController
     @location_hash = Gmaps4rails.build_markers(@venue) do |venue, marker|
       marker.lat latitude
       marker.lng longitude
-      marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.created_at}</a></h5><small>#{venue.address_formatted_address}</small>"
-    end
+      marker.infowindow "<h5>#{venue.created_at}</h5><small>#{venue.address}</small>"
+      end
     render("venues_templates/show.html.erb")
   end
 
