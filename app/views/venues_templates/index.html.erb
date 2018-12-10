@@ -94,20 +94,19 @@
           <ul class = "list-group list-group-flush">
               <% @venues.each do |venue| %>
               <% venue.bookmarks.each do |bookmark| %>
-              
-                <% if bookmark.user_id == current_user.id %>
-                  <li class = "list-group-item">
-                        <a href="/venues/<%= venue.id %>"><%= venue.name %></a>
-                      <% if venue.neighborhood.present?  %>
-                      <small class = "text-muted float-right">
-                          <%= venue.neighborhood.name %>, Chicago
-                        </small>
-                        </li>
-                      <% end %>
-                  </li>
-                <% else %>
+                <% if bookmark.user_id==current_user.id %>
+                    <li class = "list-group-item">
+                          <a href="/venues/<%= venue.id %>"><%= venue.name %></a>
+                        <% if venue.neighborhood.present?  %>
+                        <small class = "text-muted float-right">
+                            <%= venue.neighborhood.name %>, Chicago
+                          </small>
+                          </li>
+                        <% end %>
+                    </li>
+                  <% else %>
+                 <% end %>
                 <% end %>
-              <% end %>
             <% end %>
             </ul>
             </table>
