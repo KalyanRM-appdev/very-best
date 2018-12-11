@@ -137,7 +137,7 @@
         Popular dishes here
       </li>
 
-      <% @venue.specialties.each do |dish| %>
+      <% @venue.specialties.uniq.each do |dish| %>
         <li class="list-group-item">
           <a href="/dishes/<%= dish.id %>">
             <%= dish.name %>

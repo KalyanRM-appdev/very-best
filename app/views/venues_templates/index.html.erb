@@ -94,9 +94,8 @@
           <ul class = "list-group list-group-flush">
 
             <% @venues.each do |venue| %>
-
-              <% venue.bookmarks.each do |bookmark| %>
-                <% if bookmark.user_id == current_user.id %>
+              
+              <% if venue.bookmarks.where(user_id: current_user.id).present? %>
                   
                   <li class = "list-group-item">
                     
@@ -108,10 +107,7 @@
                         </li>
                       
                       <% end %>
-                    
-                  
-                <% else %>
-                <% end %>
+
               <% end %>
             <% end %>
             </ul>
